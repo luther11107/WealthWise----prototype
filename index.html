@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WealthWise Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="authBox">
+<p id="welcomeUser"></p>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
+
+  <p id="authMsg"></p>
+
+</div>
+<div id="profile">
+
+  <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" id="profileIcon">
+
+  <div id="profileMenu">
+    <p id="userName"></p>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+</div>
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>💰 WealthWise</h2>
+    <ul>
+      <li onclick="showSection('learn')">📚 Learn</li>
+      <li onclick="showSection('planner')">💰 Planner</li>
+      <li onclick="showSection('emi')">🏦 EMI</li>
+      <li onclick="showSection('currency')">💱 Currency</li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="content">
+
+    <h1>Welcome to WealthWise 🚀</h1>
+    <p>Your Smart Financial Assistant</p>
+
+    <!-- Learn -->
+<section id="learn" class="page">
+  <h2 class="section-title">📚 Financial Learning</h2>
+
+  <div class="learn-grid">
+
+    <!-- Card 1 -->
+    <div class="learn-card">
+      <div class="icon">💡</div>
+      <h3>Investing Basics</h3>
+      <p class="short">
+        Investing helps grow your money over time.
+      </p>
+      <p class="full">
+        Investing means putting your money into assets like stocks or funds
+        to generate returns and beat inflation over the long term.
+      </p>
+      <button onclick="toggle(this)">Read More</button>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="learn-card">
+      <div class="icon">📈</div>
+      <h3>Stocks</h3>
+      <p class="short">
+        Ownership in a company.
+      </p>
+      <p class="full">
+        Stocks allow you to own a portion of a company. They offer high returns
+        but come with higher risk and volatility.
+      </p>
+      <button onclick="toggle(this)">Read More</button>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="learn-card">
+      <div class="icon">🏦</div>
+      <h3>Fixed Deposits</h3>
+      <p class="short">
+        Safe and stable returns.
+      </p>
+      <p class="full">
+        Fixed Deposits are low-risk investments offered by banks with guaranteed
+        returns, suitable for conservative investors.
+      </p>
+      <button onclick="toggle(this)">Read More</button>
+    </div>
+
+  </div>
+
+  <!-- Info Box -->
+  <div class="info-box">
+    <h3>📊 Investment Insights</h3>
+    <p><b>Short-term:</b> Less than 2 years, low risk</p>
+    <p><b>Long-term:</b> 5+ years, higher returns</p>
+    <p><b>Risk Levels:</b> Low → FD | Medium → Mutual Funds | High → Stocks</p>
+  </div>
+
+</section>
+    <!-- Planner -->
+    <section id="planner" class="page">
+
+      <h2>💰 Salary Planner</h2>
+      <input type="number" id="salary" placeholder="Enter Salary">
+      <button onclick="calculatePlan()">Calculate</button>
+
+      <div id="result"></div>
+      <canvas id="chart"></canvas>
+
+      <h3>📊 Expense Tracker</h3>
+      <input type="number" id="income" placeholder="Monthly Income">
+      <input type="number" id="expense" placeholder="Monthly Expenses">
+      <button onclick="track()">Track</button>
+
+      <div id="trackResult"></div>
+      <canvas id="barChart"></canvas>
+      <canvas id="pieChart"></canvas>
+
+      <h3>📊 Investment Suggestion</h3>
+      <select id="risk">
+        <option value="low">Low Risk</option>
+        <option value="medium">Medium Risk</option>
+        <option value="high">High Risk</option>
+      </select>
+      <button onclick="suggest()">Get Suggestion</button>
+
+      <div id="suggestion"></div>
+
+    </section>
+
+    <!-- EMI -->
+    <section id="emi" class="page">
+      <h2>🏦 EMI Calculator</h2>
+      <input type="number" id="loan" placeholder="Loan Amount">
+      <input type="number" id="rate" placeholder="Interest Rate (%)">
+      <input type="number" id="time" placeholder="Time (months)">
+      <button onclick="calculateEMI()">Calculate EMI</button>
+
+      <div id="emiResult"></div>
+    </section>
+
+    <!-- Currency -->
+    <section id="currency" class="page">
+      <h2>💱 Currency Converter</h2>
+      <input type="number" id="amount" placeholder="Amount in INR">
+      <button onclick="convert()">Convert to USD</button>
+
+      <div id="currencyResult"></div>
+    </section>
+<div id="chatbot">
+
+  <div id="chatHeader">🤖 AI Advisor</div>
+
+  <div id="chatBox"></div>
+
+  <input type="text" id="userInput" placeholder="Ask something...">
+  <button onclick="sendMessage()">Send</button>
+
+</div>
+  </main>
+</div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
