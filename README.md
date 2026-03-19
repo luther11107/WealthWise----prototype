@@ -1,5 +1,3 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/user/repo/workflow.yml)
-
 WealthWise - Financial Prototype
 
 
