@@ -2,173 +2,188 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WealthWise — personal finance dashboard for budgeting, EMI, and currency conversion.">
   <title>WealthWise Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-    <div id="authBox">
-<p id="welcomeUser"></p>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
+  <!-- Authentication -->
+  <section id="authBox" class="auth-box" aria-label="Sign in">
+    <h2 class="auth-box__title">Welcome back</h2>
+    <p id="welcomeUser" class="auth-box__welcome" hidden></p>
+    <form id="authForm" class="auth-box__form" novalidate>
+      <label class="field">
+        <span class="field__label">Username</span>
+        <input type="text" id="username" name="username" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span class="field__label">Password</span>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </label>
+      <div class="auth-box__actions">
+        <button type="submit" class="btn btn--primary" data-action="login">Login</button>
+        <button type="button" class="btn btn--secondary" data-action="register">Register</button>
+      </div>
+      <p id="authMsg" class="auth-box__message" role="status" aria-live="polite"></p>
+    </form>
+  </section>
 
-  <button onclick="login()">Login</button>
-  <button onclick="register()">Register</button>
-
-  <p id="authMsg"></p>
-
-</div>
-<div id="profile">
-
-  <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" id="profileIcon">
-
-  <div id="profileMenu">
-    <p id="userName"></p>
-    <button onclick="logout()">Logout</button>
-  </div>
-
-</div>
-<div class="container">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>💰 WealthWise</h2>
-    <ul>
-      <li onclick="showSection('learn')">📚 Learn</li>
-      <li onclick="showSection('planner')">💰 Planner</li>
-      <li onclick="showSection('emi')">🏦 EMI</li>
-      <li onclick="showSection('currency')">💱 Currency</li>
-    </ul>
-  </aside>
-
-  <!-- Main -->
-  <main class="content">
-
-    <h1>Welcome to WealthWise 🚀</h1>
-    <p>Your Smart Financial Assistant</p>
-
-    <!-- Learn -->
-<section id="learn" class="page">
-  <h2 class="section-title">📚 Financial Learning</h2>
-
-  <div class="learn-grid">
-
-    <!-- Card 1 -->
-    <div class="learn-card">
-      <div class="icon">💡</div>
-      <h3>Investing Basics</h3>
-      <p class="short">
-        Investing helps grow your money over time.
-      </p>
-      <p class="full">
-        Investing means putting your money into assets like stocks or funds
-        to generate returns and beat inflation over the long term.
-      </p>
-      <button onclick="toggle(this)">Read More</button>
+  <!-- Profile (logged in) -->
+  <header id="profile" class="profile" hidden>
+    <button type="button" id="profileIcon" class="profile__avatar" aria-label="Open profile menu" aria-expanded="false" aria-controls="profileMenu">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="">
+    </button>
+    <div id="profileMenu" class="profile__menu" hidden>
+      <p id="userName" class="profile__name"></p>
+      <button type="button" class="btn btn--ghost" data-action="logout">Logout</button>
     </div>
+  </header>
 
-    <!-- Card 2 -->
-    <div class="learn-card">
-      <div class="icon">📈</div>
-      <h3>Stocks</h3>
-      <p class="short">
-        Ownership in a company.
-      </p>
-      <p class="full">
-        Stocks allow you to own a portion of a company. They offer high returns
-        but come with higher risk and volatility.
-      </p>
-      <button onclick="toggle(this)">Read More</button>
-    </div>
+  <!-- Main app -->
+  <div id="appContainer" class="app" hidden>
+    <aside class="sidebar" aria-label="Main navigation">
+      <h2 class="sidebar__brand">WealthWise</h2>
+      <nav>
+        <ul class="sidebar__nav">
+          <li><button type="button" class="nav-link" data-section="learn">Learn</button></li>
+          <li><button type="button" class="nav-link nav-link--active" data-section="planner">Planner</button></li>
+          <li><button type="button" class="nav-link" data-section="emi">EMI</button></li>
+          <li><button type="button" class="nav-link" data-section="currency">Currency</button></li>
+          <li><button type="button" class="nav-link" data-section="advisor">AI Advisor</button></li>
+        </ul>
+      </nav>
+    </aside>
 
-    <!-- Card 3 -->
-    <div class="learn-card">
-      <div class="icon">🏦</div>
-      <h3>Fixed Deposits</h3>
-      <p class="short">
-        Safe and stable returns.
-      </p>
-      <p class="full">
-        Fixed Deposits are low-risk investments offered by banks with guaranteed
-        returns, suitable for conservative investors.
-      </p>
-      <button onclick="toggle(this)">Read More</button>
-    </div>
+    <main class="content">
+      <header class="content__header">
+        <h1>Welcome to WealthWise</h1>
+        <p>Your smart financial assistant</p>
+      </header>
 
+      <!-- Learn -->
+      <section id="learn" class="page" aria-labelledby="learn-heading">
+        <h2 id="learn-heading" class="page__title">Financial learning</h2>
+        <div class="learn-grid" id="learnGrid"></div>
+        <aside class="info-box">
+          <h3>Investment insights</h3>
+          <ul class="info-box__list">
+            <li><strong>Short-term:</strong> Under 2 years, lower risk</li>
+            <li><strong>Long-term:</strong> 5+ years, higher potential returns</li>
+            <li><strong>Risk levels:</strong> Low → FD · Medium → Mutual funds · High → Stocks</li>
+          </ul>
+        </aside>
+      </section>
+
+      <!-- Planner -->
+      <section id="planner" class="page page--active" aria-labelledby="planner-heading">
+        <h2 id="planner-heading" class="page__title">Salary planner</h2>
+        <p class="page__hint">Uses the 50-30-20 rule: 50% needs, 30% wants, 20% savings.</p>
+
+        <form id="plannerForm" class="tool-card">
+          <label class="field">
+            <span class="field__label">Monthly salary (₹)</span>
+            <input type="number" id="salary" min="1" step="any" placeholder="e.g. 50000" required>
+          </label>
+          <button type="submit" class="btn btn--primary">Calculate split</button>
+          <output id="result" class="result-panel" for="salary"></output>
+          <div class="chart-wrap">
+            <canvas id="chart" aria-label="Salary allocation chart"></canvas>
+          </div>
+        </form>
+
+        <form id="expenseForm" class="tool-card">
+          <h3 class="tool-card__title">Expense tracker</h3>
+          <div class="field-row">
+            <label class="field">
+              <span class="field__label">Monthly income (₹)</span>
+              <input type="number" id="income" min="1" step="any" placeholder="Income">
+            </label>
+            <label class="field">
+              <span class="field__label">Monthly expenses (₹)</span>
+              <input type="number" id="expense" min="1" step="any" placeholder="Expenses">
+            </label>
+          </div>
+          <button type="submit" class="btn btn--primary">Track expenses</button>
+          <output id="trackResult" class="result-panel"></output>
+          <div class="chart-row">
+            <div class="chart-wrap"><canvas id="barChart" aria-label="Income vs expense bar chart"></canvas></div>
+            <div class="chart-wrap"><canvas id="pieChart" aria-label="Expense vs savings pie chart"></canvas></div>
+          </div>
+        </form>
+
+        <form id="suggestForm" class="tool-card">
+          <h3 class="tool-card__title">Investment suggestion</h3>
+          <label class="field">
+            <span class="field__label">Risk appetite</span>
+            <select id="risk">
+              <option value="low">Low risk</option>
+              <option value="medium">Medium risk</option>
+              <option value="high">High risk</option>
+            </select>
+          </label>
+          <button type="submit" class="btn btn--primary">Get suggestion</button>
+          <output id="suggestion" class="result-panel"></output>
+        </form>
+      </section>
+
+      <!-- EMI -->
+      <section id="emi" class="page" aria-labelledby="emi-heading">
+        <h2 id="emi-heading" class="page__title">EMI calculator</h2>
+        <form id="emiForm" class="tool-card">
+          <label class="field">
+            <span class="field__label">Loan amount (₹)</span>
+            <input type="number" id="loan" min="1" step="any" required>
+          </label>
+          <label class="field">
+            <span class="field__label">Annual interest rate (%)</span>
+            <input type="number" id="rate" min="0" step="any" required>
+          </label>
+          <label class="field">
+            <span class="field__label">Tenure (months)</span>
+            <input type="number" id="time" min="1" step="1" required>
+          </label>
+          <button type="submit" class="btn btn--primary">Calculate EMI</button>
+          <output id="emiResult" class="result-panel result-panel--stats"></output>
+        </form>
+      </section>
+
+      <!-- Currency -->
+      <section id="currency" class="page" aria-labelledby="currency-heading">
+        <h2 id="currency-heading" class="page__title">Currency converter</h2>
+        <form id="currencyForm" class="tool-card">
+          <label class="field">
+            <span class="field__label">Amount in INR</span>
+            <input type="number" id="amount" min="1" step="any" required>
+          </label>
+          <label class="field">
+            <span class="field__label">Convert to</span>
+            <select id="targetCurrency">
+              <option value="USD">USD — US Dollar</option>
+              <option value="EUR">EUR — Euro</option>
+              <option value="GBP">GBP — British Pound</option>
+              <option value="JPY">JPY — Japanese Yen</option>
+              <option value="AUD">AUD — Australian Dollar</option>
+            </select>
+          </label>
+          <button type="submit" class="btn btn--primary">Convert</button>
+          <output id="currencyResult" class="result-panel"></output>
+        </form>
+      </section>
+      <section id="advisor" class="page" aria-labelledby="advisor-heading">
+        <h2 id="advisor-heading" class="page__title">AI Advisor</h2>
+        <p class="page__hint">Ask about budgeting, investing, loans, or currency. Replies are rule-based, not a live AI model.</p>
+        <div class="advisor-panel" aria-label="Finance advisor chat">
+          <div id="chatBox" class="advisor-panel__messages" role="log" aria-live="polite"></div>
+          <form id="chatForm" class="advisor-panel__input-row">
+            <input type="text" id="userInput" placeholder="Ask about saving, investing, EMI…" autocomplete="off">
+            <button type="submit" id="sendBtn" class="btn btn--primary" disabled>Send</button>
+          </form>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <!-- Info Box -->
-  <div class="info-box">
-    <h3>📊 Investment Insights</h3>
-    <p><b>Short-term:</b> Less than 2 years, low risk</p>
-    <p><b>Long-term:</b> 5+ years, higher returns</p>
-    <p><b>Risk Levels:</b> Low → FD | Medium → Mutual Funds | High → Stocks</p>
-  </div>
-
-</section>
-    <!-- Planner -->
-    <section id="planner" class="page">
-
-      <h2>💰 Salary Planner</h2>
-      <input type="number" id="salary" placeholder="Enter Salary">
-      <button onclick="calculatePlan()">Calculate</button>
-
-      <div id="result"></div>
-      <canvas id="chart"></canvas>
-
-      <h3>📊 Expense Tracker</h3>
-      <input type="number" id="income" placeholder="Monthly Income">
-      <input type="number" id="expense" placeholder="Monthly Expenses">
-      <button onclick="track()">Track</button>
-
-      <div id="trackResult"></div>
-      <canvas id="barChart"></canvas>
-      <canvas id="pieChart"></canvas>
-
-      <h3>📊 Investment Suggestion</h3>
-      <select id="risk">
-        <option value="low">Low Risk</option>
-        <option value="medium">Medium Risk</option>
-        <option value="high">High Risk</option>
-      </select>
-      <button onclick="suggest()">Get Suggestion</button>
-
-      <div id="suggestion"></div>
-
-    </section>
-
-    <!-- EMI -->
-    <section id="emi" class="page">
-      <h2>🏦 EMI Calculator</h2>
-      <input type="number" id="loan" placeholder="Loan Amount">
-      <input type="number" id="rate" placeholder="Interest Rate (%)">
-      <input type="number" id="time" placeholder="Time (months)">
-      <button onclick="calculateEMI()">Calculate EMI</button>
-
-      <div id="emiResult"></div>
-    </section>
-
-    <!-- Currency -->
-    <section id="currency" class="page">
-      <h2>💱 Currency Converter</h2>
-      <input type="number" id="amount" placeholder="Amount in INR">
-      <button onclick="convert()">Convert to USD</button>
-
-      <div id="currencyResult"></div>
-    </section>
-<div id="chatbot">
-
-  <div id="chatHeader">🤖 AI Advisor</div>
-
-  <div id="chatBox"></div>
-
-  <input type="text" id="userInput" placeholder="Ask something...">
-  <button onclick="sendMessage()">Send</button>
-
-</div>
-  </main>
-</div>
-</div>
-<script src="script.js"></script>
 </body>
 </html>
